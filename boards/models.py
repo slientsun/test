@@ -7,12 +7,30 @@ class Board(models.Model):
     name = models.CharField(max_length=30, unique=True)
     description = models.CharField(max_length=100)
 
+    """
+           返回对象的字符串表示形式。
+
+           该方法被调用时，会返回对象的名称属性，用于在打印或转换为字符串时显示对象的名称。
+
+           返回:
+               str: 对象的名称字符串。
+           """
     def __str__(self):
         return self.name
+
 
     def get_posts_count(self):
         return Post.objects.filter(topic__board=self).count()
 
+    """
+           获取主题中最新的帖子。
+
+           本方法用于查询与当前主题相关的最新帖子。它通过筛选属于同一主题的帖子对象，
+           并按照创建时间降序排序，最后返回排序后的第一条帖子信息。
+
+           返回:
+               最新的帖子对象，如果不存在则为None。
+           """
     def get_last_post(self):
         return Post.objects.filter(topic__board=self).order_by('-created_at').first()
 

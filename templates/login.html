@@ -7,8 +7,10 @@
                     <div class="card-body">
                         <h3 class="card-title">Log in</h3>
                         <form method="post" novalidate>
-                            {% csrf_token %}
-                            <input type="text" name="next" value="{{ next }}">
+                            <label>
+                                {% csrf_token %}
+{#                                <input type="hidden" name="next" value="{{ next }}">#}
+                            </label>
                             {% include 'includes/form.html' %}
                             <button type="submit" class="btn btn-primary btn-block">Log in</button>
                         </form>
@@ -19,7 +21,7 @@
                 </div>
                 <div class="text-center py-2">
                     <small>
-                        <a href="#" class="text-muted">Forgotten your password?</a>
+                        <a href="{% url 'password_reset' %}" class="text-muted">Forgotten your password?</a>
                     </small>
                 </div>
             </div>

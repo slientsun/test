@@ -1,6 +1,7 @@
 {#引用插件#}
 {% load widget_tweaks %}
 
+{#显示表单的非字段错误信息。#}
 {% if form.non_field_errors %}
     <div class="alert alert-danger" role="alert">
         {% for error in form.non_field_errors %}
@@ -9,12 +10,16 @@
     </div>
 {% endif %}
 
+{#遍历表单的每一个字段，并渲染字段的标签、错误信息和帮助文本#}
 {% for field in form %}
     <div class="form-group">
+        {#这行代码会渲染字段的标签。#}
         {{ field.label_tag }}
+        {#判断表单是否已被提交#}
         {% if forms.is_bound %}
             {% if field.errors %}
                 {% render_field field class="form-control is-invalid" %}
+                {#遍历字段的错误信息，#}
                 {% for error in field.errors %}
                     <div class="invalid-feedback">
                         {{ error }}
@@ -33,3 +38,36 @@
 
 {% endfor %}
 
+
+{% comment %}{# 引用插件 #}
+{% load widget_tweaks %}
+
+{# 定义渲染字段的宏，减少重复代码 #}
+{% macro render_field_with_errors(field) %}
+    <div class="form-group">
+        {{ field.label_tag }}
+        {% render_field field class="form-control{% if form.is_bound and field.errors %} is-invalid{% elif form.is_bound %} is-valid{% endif %}" %}
+        {% if field.errors %}
+            {% for error in field.errors %}
+                <div class="invalid-feedback">
+                    {{ error }}
+                </div>
+            {% endfor %}
+        {% endif %}
+        {% if field.help_text|safe %}<small class="form-text text-muted">{{ field.help_text }}</small>{% endif %}
+    </div>
+{% endmacro %}
+
+{# 显示表单的非字段错误信息 #}
+{% if form.non_field_errors %}
+    <div class="alert alert-danger" role="alert">
+        {% for error in form.non_field_errors %}
+            <p{% if forloop.last %} class="mb-0"{% endif %}>{{ error }}</p>
+        {% endfor %}
+    </div>
+{% endif %}
+
+{# 使用宏遍历并渲染表单的每个字段 #}
+{% for field in form %}
+    {{ render_field_with_errors(field) }}
+{% endfor %}{% endcomment %}

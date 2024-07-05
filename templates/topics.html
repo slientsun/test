@@ -39,11 +39,12 @@
 
     </table>
 
-    {#    添加代码#}
+    {#    添加代码 分页功能#}
 
     {% if is_paginated %}
         <nav aria-label="Topics pagination" class="mb-4">
             <ul class="pagination">
+                {# 判断当前页面对象是否有上一页。#}
                 {% if page_obj.has_previous %}
                     <li class="page-item">
                         <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>

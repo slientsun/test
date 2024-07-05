@@ -25,12 +25,16 @@
                 <td class="align-middle">{{ board.topics.count }}</td>
                 <td class="align-middle">
                     {% with post=board.get_last_post %}
-                        <small>
+                        {#如果post为空，显示提示信息#}
+                        {% if post.topic.pk %}
                             <a href="{% url 'topic_posts' board.pk post.topic.pk %}">
                                 {{ post.created_at }}
                             </a>
-                            by {{ post.created_by.username }}
-                        </small>
+                        {% else %}
+                            <!-- 如果post.topic.pk为空，显示提示信息 -->
+                            <span class="text-muted">No topic associated</span>
+                        {% endif %}
+                        by {{ post.created_by.username }}
                     {% endwith %}
                 </td>
             </tr>
